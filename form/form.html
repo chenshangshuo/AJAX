@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+  <div class="queryArea">
+    <input type="text" name="username">
+    <button>查询</button>
+  </div>
+  <div class="detailArea">
+    <ul>
+    </ul>
+  </div>
+  <script>
+  var button = document.querySelector('.queryArea button')
+  var input = document.querySelector('.queryArea input')
+  var detailCt = document.querySelector('.detailArea ul')
+  button.addEventListener('click',function(){
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 304)) {
+        var friends = JSON.parse(xhr.responseText)
+        var html = render(friends)
+        detailCt.innerHTML = html
+      }
+    }
+    xhr.open('get','/friends?username=' + input.value, true)
+    xhr.send()
+  })
+    function render(friends){
+      var html = ''
+      for(var i = 0; i < friends.length; i++){
+        html += '<li>' + friends[i] + '</li>'
+      }
+      return html
+    }
+  </script>
+</body>
+</html>
